@@ -28,10 +28,10 @@ public class KafkaConsumer {
 
         ProductActionDto productActionDto = objectMapper.readValue(message, ProductActionDto.class);
 
-        if (Objects.equals(productActionDto.getAction(), "CREATE")) {
+        if (productActionDto.getAction() == CREATE) {
             ProductQuantity productQuantity = new ProductQuantity(productActionDto.getId(), 0);
             productQuantityService.create(productQuantity);
-        } else if (Objects.equals(productActionDto.getAction(), "DELETE")) {
+        } else if (productActionDto.getAction() == DELETE) {
             productQuantityService.delete(productActionDto.getId());
         }
     }
