@@ -1,5 +1,6 @@
 package com.example.InventoryService.DTO.API;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,6 +16,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class ProductQuantityDto implements Serializable {
     Long id;
-    @Positive
+    @Min(0)
     int quantity;
 }
