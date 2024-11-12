@@ -10,8 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
-
 import static com.example.InventoryService.Enums.Action.CREATE;
 import static com.example.InventoryService.Enums.Action.DELETE;
 
