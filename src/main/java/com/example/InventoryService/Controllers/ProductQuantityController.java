@@ -2,13 +2,15 @@ package com.example.InventoryService.Controllers;
 
 import com.example.InventoryService.DTO.API.ProductChangeRequest;
 import com.example.InventoryService.DTO.API.ProductQuantityDto;
+import com.example.InventoryService.DTO.API.ProductQuantityMapper;
 import com.example.InventoryService.Entities.ProductQuantity;
 import com.example.InventoryService.Services.ProductQuantityService;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/rest/admin-ui/inventory")
@@ -31,7 +33,7 @@ public class ProductQuantityController {
         return productQuantityMapper.toDto(productQuantity);
     }
 
-    @PutMapping("/rewrite")
+    @PutMapping("/update")
     public ProductQuantityDto rewriteQuantity(@RequestBody ProductQuantityDto quantityDto) {
         ProductQuantity productQuantity = productQuantityService.findById(quantityDto.getId());
 
@@ -60,6 +62,11 @@ public class ProductQuantityController {
         }
 
         return productQuantityMapper.toDto(productQuantityService.doOperation(productQuantity, changeRequest));
+    }
+
+    @GetMapping("/all")
+    public List<ProductQuantityDto> getAll() {
+        return productQuantityService.getAll().stream().map(productQuantityMapper::toDto).toList();
     }
 
 }

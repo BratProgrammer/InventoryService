@@ -1,6 +1,6 @@
 package com.example.InventoryService.Enums;
 
-public enum ProductAction {
+public enum Action {
     CREATE,
     DELETE
 }

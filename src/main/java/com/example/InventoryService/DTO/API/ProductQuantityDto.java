@@ -15,7 +15,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class ProductQuantityDto implements Serializable {
     Long id;
-
     @Positive
     int quantity;
 }

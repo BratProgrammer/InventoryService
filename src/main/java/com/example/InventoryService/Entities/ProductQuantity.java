@@ -1,6 +1,10 @@
 package com.example.InventoryService.Entities;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,7 +23,7 @@ public class ProductQuantity {
     private Long id;
 
     @Column(name = "quantity", nullable = false)
-    @Positive
+    @Min(0)
     private int quantity;
 
 }

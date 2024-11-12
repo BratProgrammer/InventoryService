@@ -1,51 +1,44 @@
 package com.example.InventoryService.Config;
 
-import com.fasterxml.jackson.databind.JsonSerializer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
-import org.apache.kafka.common.serialization.StringSerializer;
-import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
-import org.springframework.kafka.config.KafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
-import org.springframework.kafka.core.DefaultKafkaProducerFactory;
-import org.springframework.kafka.core.KafkaTemplate;
 
+import java.util.HashMap;
 import java.util.Map;
 
-@Configuration
 public class KafkaConfig {
 
-    @Bean
-    DefaultKafkaProducerFactory<String, String> stringProducerFactory(KafkaProperties properties) {
-        Map<String, Object> producerProperties = properties.buildProducerProperties(null);
-        producerProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        producerProperties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-        return new DefaultKafkaProducerFactory<>(producerProperties);
-    }
+
+    @Value("${spring.kafka.bootstrap-servers}")
+    private String bootstrapServers;
+
+    @Value("${spring.kafka.consumer.group-id}")
+    private String groupId;
 
     @Bean
-    KafkaTemplate<String, String> stringKafkaTemplate(DefaultKafkaProducerFactory<String, String> stringProducerFactory) {
-        return new KafkaTemplate<>(stringProducerFactory);
+    public ConsumerFactory<String, String> consumerFactory() {
+        Map<String, Object> config = new HashMap<>();
+
+        config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+        config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        config.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
+
+        return new DefaultKafkaConsumerFactory<>(config);
     }
 
-    @Bean
-    public ConsumerFactory<String, String> stringConsumerFactory(KafkaProperties kafkaProperties) {
-        Map<String, Object> props = kafkaProperties.buildConsumerProperties(null);
-        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-        return new DefaultKafkaConsumerFactory<>(props);
-    }
 
     @Bean
-    public KafkaListenerContainerFactory<?> stringListenerFactory(ConsumerFactory<String, String> stringConsumerFactory) {
+    public ConcurrentKafkaListenerContainerFactory<String, String> containerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(stringConsumerFactory);
-        factory.setBatchListener(false);
+        factory.setConsumerFactory(consumerFactory());
         return factory;
     }
+
+
 }

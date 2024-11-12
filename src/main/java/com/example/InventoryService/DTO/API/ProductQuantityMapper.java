@@ -1,6 +1,5 @@
-package com.example.InventoryService.Controllers;
+package com.example.InventoryService.DTO.API;
 
-import com.example.InventoryService.DTO.API.ProductQuantityDto;
 import com.example.InventoryService.Entities.ProductQuantity;
 import org.mapstruct.*;
 
