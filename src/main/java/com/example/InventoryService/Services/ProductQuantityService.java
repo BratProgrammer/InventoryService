@@ -41,8 +41,8 @@ public class ProductQuantityService {
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     @Cacheable(value = "quantity", key = "#productQuantity.id")
-    public void create(ProductQuantity productQuantity) {
-        productQuantityRepository.save(productQuantity);
+    public ProductQuantity create(ProductQuantity productQuantity) {
+        return productQuantityRepository.save(productQuantity);
     }
 
     @Cacheable(value = "quantity", key = "#productQuantity.id")

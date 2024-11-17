@@ -15,7 +15,7 @@ import static com.example.InventoryService.Enums.Action.DELETE;
 
 @Service
 @RequiredArgsConstructor
-public class KafkaConsumer {
+public class ProductsKafkaConsumer {
 
     private final ProductQuantityService productQuantityService;
 
